@@ -7,6 +7,11 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from starlette.status import HTTP_403_FORBIDDEN
 from starlette.requests import Request
 from fastapi.middleware.cors import CORSMiddleware
+import os
+from os.path import dirname, join
+from dotenv import load_dotenv
+load_dotenv(verbose=True)
+dotenv_path = join(dirname(__file__), ".env")
 
 app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key="some-secret-key")
@@ -14,7 +19,7 @@ app.add_middleware(SessionMiddleware, secret_key="some-secret-key")
 # CORSミドルウェアの設定
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # 許可するオリジンを指定
+    allow_origins=[os.environ.get("FASTAPI_PUBLIC_HTTP_URL")],  # 許可するオリジンを指定
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
