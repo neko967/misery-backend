@@ -95,6 +95,6 @@ async def websocket_endpoint(websocket: WebSocket, room: str):
         while True:
             data = await websocket.receive_text()
             for connection in [c for c in connections if c.room == room]:
-                await connection.websocket.send_text(f"Message text was: {data}")
+                await connection.websocket.send_text(f"{data}")
     except:
         connections.remove(conn)
