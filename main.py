@@ -19,7 +19,7 @@ app.add_middleware(SessionMiddleware, secret_key="some-secret-key")
 # CORSミドルウェアの設定
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.environ.get("FASTAPI_PUBLIC_HTTP_URL")],  # 許可するオリジンを指定
+    allow_origins=[os.environ.get("NEXT_PUBLIC_FRONTEND_HTTP_URL")],  # 許可するオリジンを指定
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
