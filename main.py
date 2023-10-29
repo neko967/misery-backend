@@ -26,7 +26,6 @@ app.add_middleware(
 
 class Room(BaseModel):
     name: str
-    password: str
     id: Optional[int] = None
 
 rooms = []
@@ -46,12 +45,12 @@ async def create_room(room: Room, request: Request):
 async def list_rooms():
     return rooms
 
-@app.post("/api/join-room/{room_id}")
-async def join_room(room_id: int, request: Request):
+@app.post("/api/join-room/{room_name}")
+async def join_room(room_name: str, request: Request):
     for room in rooms:
-        if room.id == room_id:
-            entered_password = (await request.json())["password"]
-            if entered_password == room.password:
+        if room.name == room_name:
+            entered_name = (await request.json())["name"]
+            if entered_name == room.name:
                 request.session["room_name"] = room.name
                 return {"name": room.name, "message": "Successfully joined the room"}
 
@@ -66,8 +65,8 @@ async def room_exists(name: str, request: Request):
     # request.sessionで止まっているかも
     for room in rooms:
         if room.name == name:
-            return {"exists": True, "requiresPassword": bool(room.password)}
-    return {"exists": False, "requiresPassword": False}
+            return {"exists": True, "requiresName": bool(room.name)}
+    return {"exists": False, "requiresName": False}
 
 @app.get("/api/leave-room")
 async def leave_room(request: Request):
